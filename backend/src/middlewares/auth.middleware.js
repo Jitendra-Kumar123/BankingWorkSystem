@@ -26,4 +26,4 @@ async function authMiddleware(req, res, next){
     }
 }
 
-export default authMiddleware;
+module.exports = {authMiddleware};

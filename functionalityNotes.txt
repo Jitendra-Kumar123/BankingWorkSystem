@@ -3,3 +3,15 @@ karega
 
 email send karne ke liye smtp servers banaye jate hai aur ye jo hum use kar rhe hai express server wo 
 webserver hai 
+
+how to create a new transaction step by step -
+1. validate request
+2. validate idempotencyKey
+3. check account status
+4. derive sender balance from ledger
+5. create transaction (PENDING - status)
+6. create debit ledger entry
+7. create credit ledger entry
+8. mark transaction completed
+9. commit mongodb session
+10. send email notification

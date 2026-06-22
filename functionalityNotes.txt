@@ -1,0 +1,5 @@
+jese hi koi bhi user register kare to uske email par ek welcome message pahunch jaye aur ye kaam nodemailer
+karega
+
+email send karne ke liye smtp servers banaye jate hai aur ye jo hum use kar rhe hai express server wo 
+webserver hai 

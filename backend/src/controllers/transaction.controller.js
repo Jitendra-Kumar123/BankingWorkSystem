@@ -2,6 +2,7 @@ const transactionModel = require("../models/transaction.model.js");
 const ledgerModel = require("../models/ledger.model.js");
 const accountModel = require("../models/account.model.js");
 const emailService = require("../services/email.service.js");
+const mongoose = require('mongoose');
 
 async function createTransaction(req, res){
     /** 1. Validate Request */
@@ -65,6 +66,67 @@ async function createTransaction(req, res){
             message: "Both fromUserAccount or toUserAccount must be ACTIVE for process transaction"
         })
     }
+    
+    /** 4. Derive Sender Balance from Ledger */
+    const balance = await fromUserAccount.getBalance();
+
+    if(balance < amount){
+        return res.status(400).json({
+            message: `Insufficient Balance, Current Balance is ${balance}. Requested amount is ${amount}`
+        })
+    }
+
+    /** 5. Create Transaction (PENDING - status) */
+    const session = await mongoose.startSession();
+    session.startTransaction()
+
+    const transaction = await transactionModel.create({
+        fromAccount,
+        toAccount,
+        amount,
+        idempotencyKey,
+        status: "PENDING"
+    }, {session})
+
+    const debitLedgerEntry = await ledgerModel.create({
+        account: fromAccount,
+        amount: amount,
+        transaction: transaction._id,
+        type: "DEBIT"
+    }, {session})    
+
+    const creditLedgerEntry = await ledgerModel.create({
+        account: toAccount,
+        amount: amount,
+        transaction: transaction._id,
+        type: "CREDIT"
+    }, {session})
+
+    transaction.status = "COMPLETED"
+    await transaction.save({session})
+
+    await session.commitTransaction()
+    session.endSession()
+
+    /** 10. Send Email Notification */
+    await emailService.sendTransactionEmail(req.user.email, req.user.name, amount, toAccount)
+    return res.status(201).json({
+        message: "Transaction Completed Successfully",
+        transaction: transaction
+    })
+
+    /** 6. Create Debit Ledger Entry */
+    /** 7. Create Credit Ledger Entry */
+    /** 8. Mark Transaction Completed */
+    /** 9. Commit MongoDB Session */
+    /** 10. Send Email Notification */
 }
 
-module.exports = createTransaction;
+async function createInitialFundsTransaction(req, res){
+
+}
+
+module.exports = {
+    createTransaction,
+    createInitialFundsTransaction
+};

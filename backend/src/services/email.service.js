@@ -20,6 +20,8 @@ transporter.verify((error, success) => {
   }
 });
 
+module.exports = transporter;
+
 // Function to send email
 const sendEmail = async (to, subject, text, html) => {
   try {
@@ -218,9 +220,7 @@ BankingWorkSystem Team
 }
 
 module.exports ={ 
-  sendEmail,
   sendUserRegistrationEmail,
   sendTransactionEmail,
   sendTransactionFailureEmail,
 };
-module.exports = transporter;

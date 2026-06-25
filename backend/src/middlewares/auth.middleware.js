@@ -54,6 +54,7 @@ async function authSystemUserMiddleware(req, res, next){
         })
         console.log("system user middleware err: ", err);
     }
+    
 }
 
 module.exports = {authMiddleware, authSystemUserMiddleware};

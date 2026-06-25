@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     systemUser: {
         type: Boolean,
         default: false,
-        immutable: true,
+        // immutable: true,
         select: false
     }
 }, {

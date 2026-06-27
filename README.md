@@ -20,6 +20,7 @@ A secure banking-style backend service built with **Node.js + Express + MongoDB 
 - Backend: Node.js, Express, Mongoose, JWT, Cookie Parser, Nodemailer
 - Database: MongoDB
 
+
 ## Project Structure (Backend)
 
 - `backend/server.js` - server entry

@@ -98,6 +98,7 @@ BankingWorkSystem is a MERN-based backend service that supports a simplified ban
 ## 5. Core Application Flows
 
 ### 5.1 Registration
+
 1. Validate user does not already exist by email.
 2. Create user with bcrypt-hashed password.
 3. Sign a JWT containing `userId` with 3-day expiry.
@@ -105,11 +106,13 @@ BankingWorkSystem is a MERN-based backend service that supports a simplified ban
 5. Send welcome email (Nodemailer OAuth2).
 
 ### 5.2 Login
+
 1. Find user by email and fetch password hash.
 2. Validate password using `comparePassword`.
 3. Create JWT and set cookie `token`.
 
 ### 5.3 Logout
+
 1. Extract token from cookie or `Authorization: Bearer <token>`.
 2. Blacklist token by inserting it into blacklist collection.
 3. Clear cookie value.
@@ -181,4 +184,3 @@ BankingWorkSystem is a MERN-based backend service that supports a simplified ban
 ## 9. Conclusion
 
 BankingWorkSystem demonstrates a ledger-based approach to balance management with robust transaction consistency guarantees, idempotency protections, and token invalidation for logout. It provides a solid foundation for extending into full banking features such as transaction histories, account freezing, and audit dashboards.
-
